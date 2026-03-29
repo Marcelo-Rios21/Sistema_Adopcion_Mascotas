@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrar Mascotas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container container-wide">
+    <h1>Administración de Mascotas</h1>
+
+    <div th:if="${#lists.isEmpty(mascotas)}" class="alert">
+        No hay mascotas registradas.
+    </div>
+
+    <table th:if="${not #lists.isEmpty(mascotas)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Especie</th>
+            <th>Raza</th>
+            <th>Edad</th>
+            <th>Género</th>
+            <th>Ubicación</th>
+            <th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mascota : ${mascotas}">
+            <td th:text="${mascota.id}"></td>
+            <td th:text="${mascota.nombre}"></td>
+            <td th:text="${mascota.especie}"></td>
+            <td th:text="${mascota.raza}"></td>
+            <td th:text="${mascota.edad}"></td>
+            <td th:text="${mascota.genero}"></td>
+            <td th:text="${mascota.ubicacion}"></td>
+            <td th:text="${mascota.estadoAdopcion}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a class="btn" th:href="@{/admin/mascotas/nueva}">Registrar mascota</a>
+        <a class="btn secondary" th:href="@{/dashboard}">Volver al panel</a>
+    </div>
+</div>
+</body>
+</html>
