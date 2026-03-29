@@ -32,74 +32,36 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         try {
             http
-                // Temporalmente se mantiene deshabilitado para no romper
-                // los formularios actuales. Lo endureceremos cuando rehagamos las vistas.
                 .csrf(csrf -> csrf.disable())
-
-                // Permitimos sesión para Thymeleaf/login web y JWT para API.
                 .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
-
                 .authorizeHttpRequests(auth -> auth
-                    // =========================
-                    // RUTAS WEB PÚBLICAS
-                    // =========================
                     .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+                    .requestMatchers("/catalogo").permitAll()
 
-                    // RUTAS WEB PÚBLICAS FUTURAS
-                    .requestMatchers("/catalogo", "/catalogo/buscar").permitAll()
-
-                    // =========================
-                    // API PÚBLICA
-                    // =========================
-                    .requestMatchers("/api/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
 
-                    // Compatibilidad temporal con el proyecto actual:
-                    // listar pacientes queda público como futuro catálogo.
-                    .requestMatchers(HttpMethod.GET, "/api/pacientes").permitAll()
-
-                    // =========================
-                    // API PRIVADA ACTUAL
-                    // =========================
-                    .requestMatchers(HttpMethod.POST, "/api/pacientes").authenticated()
-                    .requestMatchers("/api/citas/**").authenticated()
-
-                    // =========================
-                    // API PRIVADA FUTURA
-                    // =========================
+                    .requestMatchers("/dashboard", "/admin/**").authenticated()
                     .requestMatchers("/api/private/**").authenticated()
 
-                    // =========================
-                    // RUTAS WEB PRIVADAS ACTUALES
-                    // =========================
-                    .requestMatchers("/dashboard", "/pacientes/**", "/citas/**").authenticated()
-
-                    // RUTAS WEB PRIVADAS FUTURAS
-                    .requestMatchers("/admin/**").authenticated()
-
-                    // Todo lo demás, privado por defecto
                     .anyRequest().authenticated()
                 )
-
                 .formLogin(form -> form
                     .loginPage("/login")
                     .defaultSuccessUrl("/dashboard", true)
                     .permitAll()
                 )
-
                 .logout(logout -> logout
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/login?logout")
                     .permitAll()
                 )
-
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
             return http.build();
-
         } catch (Exception e) {
             throw new IllegalStateException("Error al configurar Spring Security.", e);
         }

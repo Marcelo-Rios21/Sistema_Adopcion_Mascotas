@@ -2,14 +2,18 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Veterinaria - Inicio</title>
+    <title>Sistema de Adopción de Mascotas</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
     <div class="container">
-        <h1>Sistema de Gestión Veterinaria</h1>
-        <p>Bienvenido al sistema.</p>
-        <a class="btn" th:href="@{/login}">Iniciar sesión</a>
+        <h1>Unidos por Los Animales</h1>
+        <p>Plataforma para la adopción responsable de mascotas rescatadas.</p>
+
+        <div class="actions">
+            <a class="btn" th:href="@{/catalogo}">Ver catálogo</a>
+            <a class="btn secondary" th:href="@{/login}">Iniciar sesión</a>
+        </div>
     </div>
 </body>
 </html>
