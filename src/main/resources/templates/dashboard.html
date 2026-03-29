@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Panel Principal</h1>
+        <p>Has iniciado sesión correctamente.</p>
+
+        <div class="actions">
+        <a class="btn" th:href="@{/pacientes}">Ver pacientes</a>
+        <a class="btn" th:href="@{/pacientes/nuevo}">Registrar paciente</a>
+        <a class="btn" th:href="@{/citas}">Ver citas</a>
+        <a class="btn" th:href="@{/citas/nueva}">Programar cita</a>
+        <a class="btn secondary" th:href="@{/}">Ir al inicio</a>
+        </div>
+
+        <form th:action="@{/logout}" method="post" style="margin-top: 15px;">
+        <button class="btn danger" type="submit">Cerrar sesión</button>
+        </form>
+    </div>
+</body>
+</html>

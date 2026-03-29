@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pacientes</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container container-wide">
+    <h1>Lista de Pacientes</h1>
+
+    <div th:if="${mensajeExito}" class="alert success" th:text="${mensajeExito}"></div>
+
+    <div th:if="${#lists.isEmpty(pacientes)}" class="alert">
+        No hay pacientes registrados todavía.
+    </div>
+
+    <table th:if="${not #lists.isEmpty(pacientes)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Especie</th>
+            <th>Raza</th>
+            <th>Edad</th>
+            <th>Dueño</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="paciente : ${pacientes}">
+            <td th:text="${paciente.id}"></td>
+            <td th:text="${paciente.nombre}"></td>
+            <td th:text="${paciente.especie}"></td>
+            <td th:text="${paciente.raza}"></td>
+            <td th:text="${paciente.edad}"></td>
+            <td th:text="${paciente.dueno}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a class="btn" th:href="@{/pacientes/nuevo}">Nuevo paciente</a>
+        <a class="btn secondary" th:href="@{/dashboard}">Volver al panel</a>
+    </div>
+</div>
+</body>
+</html>
