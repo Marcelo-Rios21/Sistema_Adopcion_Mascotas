@@ -11,8 +11,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "pacientes")
-public class Paciente {
+@Table(name = "mascotas")
+public class Mascota {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,20 +35,48 @@ public class Paciente {
     @Column(nullable = false)
     private Integer edad;
 
-    @NotBlank(message = "El dueño es obligatorio.")
-    @Column(nullable = false, length = 100)
-    private String dueno;
+    @NotBlank(message = "El género es obligatorio.")
+    @Column(nullable = false, length = 20)
+    private String genero;
 
-    public Paciente() {
+    @NotBlank(message = "La ubicación es obligatoria.")
+    @Column(nullable = false, length = 100)
+    private String ubicacion;
+
+    @NotBlank(message = "El estado de adopción es obligatorio.")
+    @Column(nullable = false, length = 30)
+    private String estadoAdopcion;
+
+    @NotBlank(message = "La foto es obligatoria.")
+    @Column(nullable = false, length = 255)
+    private String fotoUrl;
+
+    public Mascota() {
     }
 
-    public Paciente(Long id, String nombre, String especie, String raza, Integer edad, String dueno) {
+    public Mascota(Long id, String nombre, String especie, String raza, Integer edad,
+                   String genero, String ubicacion, String estadoAdopcion, String fotoUrl) {
         this.id = id;
         this.nombre = nombre;
         this.especie = especie;
         this.raza = raza;
         this.edad = edad;
-        this.dueno = dueno;
+        this.genero = genero;
+        this.ubicacion = ubicacion;
+        this.estadoAdopcion = estadoAdopcion;
+        this.fotoUrl = fotoUrl;
+    }
+
+    public Mascota(String nombre, String especie, String raza, Integer edad,
+               String genero, String ubicacion, String estadoAdopcion, String fotoUrl) {
+    this.nombre = nombre;
+    this.especie = especie;
+    this.raza = raza;
+    this.edad = edad;
+    this.genero = genero;
+    this.ubicacion = ubicacion;
+    this.estadoAdopcion = estadoAdopcion;
+    this.fotoUrl = fotoUrl;
     }
 
     public Long getId() {
@@ -91,12 +119,35 @@ public class Paciente {
         this.edad = edad;
     }
 
-    public String getDueno() {
-        return dueno;
+    public String getGenero() {
+        return genero;
     }
 
-    public void setDueno(String dueno) {
-        this.dueno = dueno;
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
 
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public String getEstadoAdopcion() {
+        return estadoAdopcion;
+    }
+
+    public void setEstadoAdopcion(String estadoAdopcion) {
+        this.estadoAdopcion = estadoAdopcion;
+    }
+
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
+    }
 }
