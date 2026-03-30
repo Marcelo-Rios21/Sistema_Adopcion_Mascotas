@@ -67,7 +67,6 @@ public class SecurityConfig {
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) {
         try {
             http
-                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
@@ -76,6 +75,12 @@ public class SecurityConfig {
                     .requestMatchers("/catalogo", "/catalogo/buscar").permitAll()
                     .requestMatchers("/dashboard", "/admin/**").authenticated()
                     .anyRequest().authenticated()
+                )
+                .headers(headers -> headers
+                    .contentSecurityPolicy(csp -> csp
+                        .policyDirectives("default-src 'self'; img-src 'self' https://placehold.co data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';")
+                    )
+                    .contentTypeOptions(contentTypeOptions -> {})
                 )
                 .formLogin(form -> form
                     .loginPage("/login")
