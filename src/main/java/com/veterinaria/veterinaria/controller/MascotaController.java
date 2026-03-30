@@ -77,6 +77,12 @@ public class MascotaController {
         return "mascotas/form";
     }
 
+    @GetMapping("/admin/mascotas/eliminar/{id}")
+    public String eliminarMascota(@PathVariable Long id) {
+        mascotaService.eliminarPorId(id);
+        return "redirect:/admin/mascotas";
+    }
+
     @PostMapping("/admin/mascotas/guardar")
     public String guardarMascota(@Valid @ModelAttribute("mascota") Mascota mascota,
                                  BindingResult result) {

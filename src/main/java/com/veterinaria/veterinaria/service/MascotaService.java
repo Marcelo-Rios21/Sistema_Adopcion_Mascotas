@@ -44,4 +44,11 @@ public class MascotaService {
         return mascotaRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Mascota no encontrada con id: " + id));
     }
+
+    public void eliminarPorId(Long id) {
+        if (!mascotaRepository.existsById(id)) {
+            throw new IllegalArgumentException("Mascota no encontrada con id: " + id);
+        }
+        mascotaRepository.deleteById(id);
+    }
 }

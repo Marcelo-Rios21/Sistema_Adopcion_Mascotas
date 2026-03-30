@@ -39,7 +39,11 @@
             <td th:text="${mascota.estadoAdopcion}"></td>
             <td>
                 <a class="btn secondary" th:href="@{/admin/mascotas/editar/{id}(id=${mascota.id})}">
-                Editar
+                    Editar
+                </a>
+                <a class="btn secondary" th:href="@{/admin/mascotas/eliminar/{id}(id=${mascota.id})}"
+                onclick="return confirm('¿Seguro que deseas eliminar esta mascota?');">
+                    Eliminar
                 </a>
             </td>
         </tr>
