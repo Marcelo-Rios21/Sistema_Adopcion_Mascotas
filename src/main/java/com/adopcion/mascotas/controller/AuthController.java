@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adopcion.mascotas.dto.LoginRequest;
 import com.adopcion.mascotas.dto.LoginResponse;
-import com.adopcion.mascotas.repository.UsuarioRepository;
 import com.adopcion.mascotas.security.JwtService;
 
 import jakarta.validation.Valid;
@@ -26,14 +25,11 @@ import jakarta.validation.Valid;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UsuarioRepository usuarioRepository;
 
     public AuthController(AuthenticationManager authenticationManager,
-                          JwtService jwtService,
-                          UsuarioRepository usuarioRepository) {
+                          JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
-        this.usuarioRepository = usuarioRepository;
     }
 
     @PostMapping("/login")
