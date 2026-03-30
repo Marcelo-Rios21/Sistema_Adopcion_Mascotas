@@ -2,7 +2,9 @@ package com.veterinaria.veterinaria.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -11,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.veterinaria.veterinaria.security.CustomUserDetailsService;
@@ -29,7 +32,39 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    @Order(1)
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) {
+        try {
+            http
+                .securityMatcher("/api/**")
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session ->
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(auth -> auth
+                    .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
+                    .requestMatchers("/api/private/**").authenticated()
+                    .anyRequest().denyAll()
+                )
+                .exceptionHandling(ex -> ex
+                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                )
+                .formLogin(form -> form.disable())
+                .logout(logout -> logout.disable())
+                .httpBasic(httpBasic -> httpBasic.disable())
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+            return http.build();
+        } catch (Exception e) {
+            throw new IllegalStateException("Error al configurar la seguridad de la API.", e);
+        }
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) {
         try {
             http
                 .csrf(csrf -> csrf.disable())
@@ -38,14 +73,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-                    .requestMatchers("/catalogo").permitAll()
-
-                    .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
-
+                    .requestMatchers("/catalogo", "/catalogo/buscar").permitAll()
                     .requestMatchers("/dashboard", "/admin/**").authenticated()
-                    .requestMatchers("/api/private/**").authenticated()
-
                     .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -58,12 +87,11 @@ public class SecurityConfig {
                     .logoutSuccessUrl("/login?logout")
                     .permitAll()
                 )
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .authenticationProvider(authenticationProvider());
 
             return http.build();
         } catch (Exception e) {
-            throw new IllegalStateException("Error al configurar Spring Security.", e);
+            throw new IllegalStateException("Error al configurar la seguridad web.", e);
         }
     }
 
