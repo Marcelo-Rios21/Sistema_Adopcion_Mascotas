@@ -7,9 +7,10 @@
 </head>
 <body>
 <div class="container container-wide">
-    <h1>Registrar Mascota en Adopción</h1>
+    <h1 th:text="${mascota.id != null} ? 'Editar Mascota' : 'Registrar Mascota en Adopción'"></h1>
 
     <form th:action="@{/admin/mascotas/guardar}" th:object="${mascota}" method="post">
+        <input type="hidden" th:field="*{id}">
 
         <div class="form-group">
             <label for="nombre">Nombre</label>
@@ -60,7 +61,8 @@
         </div>
 
         <div class="actions">
-            <button class="btn" type="submit">Guardar mascota</button>
+            <button class="btn" type="submit"
+                    th:text="${mascota.id != null} ? 'Actualizar mascota' : 'Guardar mascota'"></button>
             <a class="btn secondary" th:href="@{/catalogo}">Ver catálogo</a>
             <a class="btn secondary" th:href="@{/dashboard}">Volver</a>
         </div>

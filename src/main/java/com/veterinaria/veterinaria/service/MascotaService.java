@@ -39,4 +39,9 @@ public class MascotaService {
     public List<Mascota> buscarPorEdad(Integer edad) {
         return mascotaRepository.findByEdad(edad);
     }
+
+    public Mascota obtenerPorId(Long id) {
+        return mascotaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Mascota no encontrada con id: " + id));
+    }
 }

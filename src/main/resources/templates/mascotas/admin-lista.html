@@ -24,6 +24,7 @@
             <th>Género</th>
             <th>Ubicación</th>
             <th>Estado</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -36,6 +37,11 @@
             <td th:text="${mascota.genero}"></td>
             <td th:text="${mascota.ubicacion}"></td>
             <td th:text="${mascota.estadoAdopcion}"></td>
+            <td>
+                <a class="btn secondary" th:href="@{/admin/mascotas/editar/{id}(id=${mascota.id})}">
+                Editar
+                </a>
+            </td>
         </tr>
         </tbody>
     </table>
