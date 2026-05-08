@@ -44,7 +44,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
-                    .requestMatchers("/api/private/**").authenticated()
+
+                    // API privada: acceso solo para usuarios con roles internos autorizados
+                    .requestMatchers("/api/private/**").hasAnyRole("ADMIN", "GESTOR", "OPERADOR")
+
                     .anyRequest().denyAll()
                 )
                 .exceptionHandling(ex -> ex
@@ -73,15 +76,37 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
                     .requestMatchers("/catalogo", "/catalogo/buscar").permitAll()
-                    .requestMatchers("/dashboard", "/admin/**").authenticated()
+
+                    // Panel principal: usuarios internos autenticados
+                    .requestMatchers("/dashboard").hasAnyRole("ADMIN", "GESTOR", "OPERADOR")
+
+                    // Administración de mascotas: solo ADMIN y GESTOR
+                    .requestMatchers("/admin/**").hasAnyRole("ADMIN", "GESTOR")
+
                     .anyRequest().authenticated()
                 )
                 .headers(headers -> headers
-                    .contentSecurityPolicy(csp -> csp
-                        .policyDirectives("default-src 'self'; img-src 'self' https://placehold.co data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';")
-                    )
-                    .contentTypeOptions(contentTypeOptions -> {})
-                )
+    .contentSecurityPolicy(csp -> csp
+        .policyDirectives(
+            "default-src 'self'; " +
+            "img-src 'self' https://placehold.co data:; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "script-src 'self' 'unsafe-inline'; " +
+            "object-src 'none'; " +
+            "base-uri 'self'; " +
+            "form-action 'self'; " +
+            "frame-ancestors 'none';"
+        )
+    )
+    .contentTypeOptions(contentTypeOptions -> {})
+        .frameOptions(frameOptions -> frameOptions.deny())
+        .referrerPolicy(referrerPolicy -> referrerPolicy
+            .policy(org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)
+        )
+        .permissionsPolicyHeader(permissionsPolicy -> permissionsPolicy
+            .policy("camera=(), microphone=(), geolocation=(), payment=(), usb=()")
+        )
+    )
                 .formLogin(form -> form
                     .loginPage("/login")
                     .defaultSuccessUrl("/dashboard", true)

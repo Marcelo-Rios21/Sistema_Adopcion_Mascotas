@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Catálogo de Mascotas</title>
@@ -72,8 +74,19 @@
     </table>
 
     <div class="actions">
-        <a class="btn" th:href="@{/login}">Iniciar sesión</a>
-        <a class="btn secondary" th:href="@{/admin/mascotas/nueva}">Registrar mascota</a>
+        <a class="btn" th:href="@{/login}" sec:authorize="isAnonymous()">
+            Iniciar sesión
+        </a>
+
+        <a class="btn" th:href="@{/dashboard}" sec:authorize="isAuthenticated()">
+            Volver al panel
+        </a>
+
+        <a class="btn secondary"
+        th:href="@{/admin/mascotas/nueva}"
+        sec:authorize="hasAnyRole('ADMIN', 'GESTOR')">
+            Registrar mascota
+        </a>
     </div>
 </div>
 </body>
