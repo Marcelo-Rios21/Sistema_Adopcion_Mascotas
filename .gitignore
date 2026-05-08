@@ -35,3 +35,8 @@ build/
 # Ignorar archivos de log
 *.log
 backend.log.*
+
+# Variables de entorno locales
+.env
+.env.*
+!.env.example
