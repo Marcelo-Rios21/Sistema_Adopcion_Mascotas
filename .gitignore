@@ -40,3 +40,8 @@ backend.log.*
 .env
 .env.*
 !.env.example
+
+# Reportes ZAP
+zap-baseline-report.*
+zap.yaml
+

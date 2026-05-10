@@ -90,8 +90,8 @@ public class SecurityConfig {
         .policyDirectives(
             "default-src 'self'; " +
             "img-src 'self' https://placehold.co data:; " +
-            "style-src 'self' 'unsafe-inline'; " +
-            "script-src 'self' 'unsafe-inline'; " +
+            "style-src 'self'; " +
+            "script-src 'self'; " +
             "object-src 'none'; " +
             "base-uri 'self'; " +
             "form-action 'self'; " +

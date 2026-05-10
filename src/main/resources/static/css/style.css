@@ -119,3 +119,7 @@ table th {
     margin-top: 5px;
     font-size: 0.9rem;
 }
+
+.form-inline {
+    display: inline;
+}
